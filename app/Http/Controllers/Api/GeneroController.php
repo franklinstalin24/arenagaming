@@ -2,7 +2,7 @@
  
 namespace App\Http\Controllers\Api;
  
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller; // Ensure the correct namespace for the base Controller
 use App\Models\Genero;
 use Illuminate\Http\Request;
  

@@ -17,11 +17,11 @@ class Juego extends Model
         'titulo', 
         'descripcion_corta', 
         'descripcion_larga', 
-        'precio_normal ',
+        'precio_normal',
         'precio_oferta', 
         'imagen_url', 
         'es_destacado', 
-        'esta_activo',
+        'activo',
         'plataforma_id',];
 
     //relacion muchos a uno

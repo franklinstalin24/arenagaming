@@ -18,7 +18,7 @@ class Genero extends Model
     //relacion uno a muchos
     public function juegos()
     {
-        //modelo fk de la otra tabla
-        return $this->hasMany(Juego::class, 'juego_genero', 'genero_id', 'juego_id');
+        //relacion muchos a muchos con la tabla pivote 'juego_genero'
+        return $this->belongsToMany(Juego::class, 'juego_genero', 'genero_id', 'juego_id');
     }
 }

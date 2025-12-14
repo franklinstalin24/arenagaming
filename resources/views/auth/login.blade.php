@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login - ArenaGaming</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="flex items-center justify-center min-h-screen">
+      <div class="w-full max-w-md p-6 bg-white rounded shadow">
+        <h1 class="mb-4 text-2xl font-semibold text-center">Iniciar sesión</h1>
+        <form id="login-form" class="space-y-3">
+          <input id="login-email" type="email" placeholder="Correo" required class="w-full p-2 border rounded" />
+          <input id="login-password" type="password" placeholder="Contraseña" required class="w-full p-2 border rounded" />
+          <button class="w-full px-3 py-2 text-white bg-blue-600 rounded">Entrar</button>
+        </form>
+        <p class="mt-4 text-sm text-center">¿No tienes cuenta? <a href="/register.html" class="text-blue-600">Regístrate</a></p>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = '/api';
+      document.getElementById('login-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        try {
+          const res = await fetch(`${API_BASE}/auth/login`, {
+            method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({email, password})
+          });
+          if (!res.ok) throw new Error('login failed');
+          const data = await res.json();
+          localStorage.setItem('token', data.token);
+          window.location.href = '/';
+        } catch (e) {
+          alert('Error de inicio de sesión');
+        }
+      };
+    </script>
+  </body>
+</html>

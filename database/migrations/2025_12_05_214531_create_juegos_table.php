@@ -32,7 +32,7 @@ return new class extends Migration
             $table->foreignId('plataforma_id')
             ->nullable()
             ->constrained('plataformas')
-            ->nullOnDelete('set null');
+            ->nullOnDelete();
 
             $table->timestamps();
         });

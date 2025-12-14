@@ -2,29 +2,49 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller as BaseController; // Solución: Usar el controlador base de Laravel si el de la app no está disponible
 use Illuminate\Http\Request;
+use App\Models\Juego;
+use App\Services\FirebaseService;
 
-class JuegoController extends Controller
+class JuegoController extends BaseController // Se extiende del alias BaseController
 {
+    protected $firebaseService;
+    
+    // Corregido: Asignar la instancia inyectada por Laravel
+    public function __construct(FirebaseService $firebaseService)
+    {
+        // En un entorno de producción con DI, solo se usaría $this->firebaseService = $firebaseService;
+        // Sin embargo, si el servicio no está registrado correctamente, la línea de abajo puede ser un fallback temporal.
+        // Pero idealmente, deberíamos usar la inyección:
+        $this->firebaseService = $firebaseService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $query = Juego::with(['plataforma', 'generos']) ->where('activo', true);
+        $query = Juego::with(['plataforma', 'generos'])->where('activo', true);
 
         if ($request->has('buscar')) {
             $termino = $request->input('buscar');
             $query->where('titulo', 'like', '%' . $termino . '%');
         }
 
-        $juegos = $query->orderBy('created_at', 'desc')->get();
+        $perPage = (int) $request->input('per_page', 12);
+        $juegos = $query->orderBy('created_at', 'desc')->paginate($perPage);
 
         return response()->json([
             'success' => true,
-            'cantidad' => $juegos->count(),
-            'data' => $juegos,
+            'cantidad' => $juegos->total(),
+            'data' => $juegos->items(),
+            'pagination' => [
+                'current_page' => $juegos->currentPage(),
+                'per_page' => $juegos->perPage(),
+                'last_page' => $juegos->lastPage(),
+                'total' => $juegos->total(),
+            ],
         ], 200);
     }
 
@@ -33,13 +53,13 @@ class JuegoController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
+        $request->validate([
             'titulo' => 'required|string|max:255',
             'descripcion_corta' => 'nullable|string',
             'descripcion_larga' => 'nullable|string',
-            'precio_normal' => 'rquired|numeric',
+            'precio_normal' => 'required|numeric',
             'precio_oferta' => 'nullable|numeric|lt:precio_normal',
-            'imagen_url' => 'nullable|string',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
             'es_destacado' => 'boolean',
             'activo' => 'boolean',
             'plataforma_id' => 'required|exists:plataformas,id',
@@ -47,7 +67,14 @@ class JuegoController extends Controller
             'generos.*' => 'exists:generos,id',
         ]);
 
-        $juego = Juego::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('imagen')) {
+            $url = $this->firebaseService->uploadImage($request->file('imagen'), 'juegos');
+            $data['imagen_url'] = $url; // guarda la url en el campo imagen_url
+        }
+
+        $juego = Juego::create($data);
 
         if($request->has('generos')){
             $juego->generos()->sync($request->input('generos'));
@@ -56,7 +83,7 @@ class JuegoController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Juego creado exitosamente',
-            'data' => $juego -> load('generos')
+            'data' => $juego->load('generos')
         ], 201);
     }
 
@@ -99,7 +126,7 @@ class JuegoController extends Controller
             'descripcion_larga' => 'nullable|string',
             'precio_normal' => 'sometimes|required|numeric',
             'precio_oferta' => 'nullable|numeric|lt:precio_normal',
-            'imagen_url' => 'sometimes|nullable|string',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', 
             'es_destacado' => 'sometimes|boolean',
             'activo' => 'sometimes|boolean',
             'plataforma_id' => 'sometimes|required|exists:plataformas,id',
@@ -107,7 +134,14 @@ class JuegoController extends Controller
             'generos.*' => 'exists:generos,id',
         ]);
 
-        $juego->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('imagen')) {
+            $url = $this->firebaseService->uploadImage($request->file('imagen'), 'juegos');
+            $data['imagen_url'] = $url; 
+        }
+        
+        $juego->update($data);
 
         if($request->has('generos')){
             $juego->generos()->sync($request->input('generos'));
@@ -116,7 +150,7 @@ class JuegoController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Juego actualizado exitosamente',
-            'data' => $juego -> load('generos'),
+            'data' => $juego->load('generos'),
         ], 200);
 
     }
@@ -134,12 +168,12 @@ class JuegoController extends Controller
                 'message' => 'Juego no encontrado',
             ], 404);
         }
-        $juego->delete();  
+        
+        $juego->delete();    
 
         return response()->json([
             'success' => true,
             'message' => 'Juego eliminado exitosamente',
         ], 200);
-    
     }
 }

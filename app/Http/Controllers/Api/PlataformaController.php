@@ -2,7 +2,9 @@
  
 namespace App\Http\Controllers\Api;
  
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController; // Change this to the correct base controller if needed
+// Removed duplicate import
+use Illuminate\Routing\Controller; // Correct import for the base controller
 use Illuminate\Http\Request;
  
 use App\Models\Plataforma;

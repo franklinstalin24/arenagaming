@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    // Weather API (e.g., OpenWeatherMap)
+    'weather' => [
+        'key' => env('WEATHER_API_KEY'),
+        'base_url' => env('WEATHER_API_BASE_URL', 'https://api.openweathermap.org/data/2.5/weather'),
+        'units' => env('WEATHER_API_UNITS', 'metric'),
+        'lang' => env('WEATHER_API_LANG', 'es'),
+    ],
+
 ];
