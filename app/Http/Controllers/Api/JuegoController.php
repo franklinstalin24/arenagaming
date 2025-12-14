@@ -65,7 +65,19 @@ class JuegoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $juego = Juego::with(['plataforma', 'generos'])->where('activo', true)->find($id);
+
+        if (!$juego) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Juego no encontrado',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $juego,
+        ], 200);
     }
 
     /**
@@ -73,7 +85,40 @@ class JuegoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $juego = Juego::find($id);
+
+        if (!$juego) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Juego no encontrado',
+            ], 404);
+        }
+        $request->validate([
+            'titulo' => 'sometimes|required|string|max:255',
+            'descripcion_corta' => 'sometimes|nullable|string',
+            'descripcion_larga' => 'nullable|string',
+            'precio_normal' => 'sometimes|required|numeric',
+            'precio_oferta' => 'nullable|numeric|lt:precio_normal',
+            'imagen_url' => 'sometimes|nullable|string',
+            'es_destacado' => 'sometimes|boolean',
+            'activo' => 'sometimes|boolean',
+            'plataforma_id' => 'sometimes|required|exists:plataformas,id',
+            'generos' => 'sometimes|array',
+            'generos.*' => 'exists:generos,id',
+        ]);
+
+        $juego->update($request->all());
+
+        if($request->has('generos')){
+            $juego->generos()->sync($request->input('generos'));
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Juego actualizado exitosamente',
+            'data' => $juego -> load('generos'),
+        ], 200);
+
     }
 
     /**
@@ -81,6 +126,20 @@ class JuegoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $juego = Juego::find($id);
+
+        if (!$juego) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Juego no encontrado',
+            ], 404);
+        }
+        $juego->delete();  
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Juego eliminado exitosamente',
+        ], 200);
+    
     }
 }

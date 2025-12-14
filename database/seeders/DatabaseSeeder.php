@@ -36,9 +36,9 @@ class DatabaseSeeder extends Seeder
     
     // 5. Usuario Admin
     \App\Models\User::create([
-        'name' => 'Profesor',
-        'email' => 'profe@gamezone.com',
-        'password' => bcrypt('admin123'),
+        'name' => 'franklin',
+        'email' => 'franklin@arenagaming.com',
+        'password', => bcrypt('securepassword'),
         'role' => 'admin'
     ]);
     }
