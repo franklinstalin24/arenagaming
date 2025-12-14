@@ -4,10 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController; // Asegúrese de que esta línea esté presente
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('spa');
 });
 
-// Ruta para visualizar el catálogo SPA
+// Ruta alternativa para el SPA
 Route::get('/app', function () {
     return view('spa');
 });

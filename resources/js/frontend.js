@@ -267,7 +267,7 @@ async function loadFavorites() {
     items.forEach(fav => {
       const p = fav.juego || {};
       const card = document.createElement('div');
-      card.className = 'p-2 bg-white rounded shadow border border-yellow-300';
+      card.className = 'p-2 bg-white border border-yellow-300 rounded shadow';
       card.innerHTML = `
         <img src="${p.imagen_url || ''}" alt="${p.titulo || ''}" class="w-full h-24 object-cover rounded" />
         <h3 class="mt-1 text-xs font-semibold truncate">${p.titulo || ''}</h3>

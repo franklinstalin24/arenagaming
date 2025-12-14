@@ -25,43 +25,43 @@
         </section>
 
         <!-- Sección de Favoritos (solo para usuarios autenticados) -->
-        <section id="favorites-block" class="hidden p-4 mb-6 bg-gradient-to-r from-yellow-100 to-amber-50 rounded-lg shadow border border-yellow-400">
-          <h2 class="text-lg font-semibold text-yellow-900 mb-3">⭐ Mis Favoritos</h2>
+        <section id="favorites-block" class="hidden p-4 mb-6 border border-yellow-400 rounded-lg shadow bg-gradient-to-r from-yellow-100 to-amber-50">
+          <h2 class="mb-3 text-lg font-semibold text-yellow-900">⭐ Mis Favoritos</h2>
           <div id="favorites-section" class="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
             <!-- Se llenará con JS -->
           </div>
         </section>
 
         <section class="mb-6">
-          <h2 class="text-2xl font-bold mb-4 text-gray-800">📦 Catálogo Completo</h2>
+          <h2 class="mb-4 text-2xl font-bold text-gray-800">📦 Catálogo Completo</h2>
           <div id="catalog-section" class="grid grid-cols-1 gap-4 md:grid-cols-3">
             <!-- Catalogo: se llenará con JS -->
           </div>
         </section>
-        <div id="catalog-pagination" class="mt-6 text-center space-x-2"></div>
+        <div id="catalog-pagination" class="mt-6 space-x-2 text-center"></div>
 
-        <section id="detail-modal" class="fixed inset-0 flex items-center justify-center hidden p-4 bg-black/50">
-          <div class="relative w-full max-w-2xl p-6 bg-white rounded-lg shadow-xl max-h-[90vh] overflow-y-auto">
-            <button id="close-detail" class="absolute text-gray-500 hover:text-gray-700 right-4 top-4 text-xl">✕</button>
+        <section id="detail-modal" class="fixed inset-0 hidden items-center justify-center p-4 bg-black/50">
+          <div class="relative w-full max-w-2xl p-6 bg-white rounded-lg shadow-xl max-h-[90vh] overflow-y-auto flex">
+            <button id="close-detail" class="absolute text-xl text-gray-500 hover:text-gray-700 right-4 top-4">✕</button>
             <div id="detail-content"></div>
             
             <!-- Sección de Comentarios -->
-            <div class="mt-6 pt-4 border-t">
-              <h3 class="text-lg font-semibold mb-3">💬 Comentarios</h3>
-              <div id="comments-list" class="mt-3 space-y-3 max-h-60 overflow-y-auto"></div>
+            <div class="pt-4 mt-6 border-t">
+              <h3 class="mb-3 text-lg font-semibold">💬 Comentarios</h3>
+              <div id="comments-list" class="mt-3 space-y-3 overflow-y-auto max-h-60"></div>
               
-              <div class="mt-4 p-4 bg-blue-50 rounded-lg">
-                <label for="comment-input" class="block text-sm font-medium text-gray-700 mb-2">Deja tu comentario</label>
+              <div class="p-4 mt-4 rounded-lg bg-blue-50">
+                <label for="comment-input" class="block mb-2 text-sm font-medium text-gray-700">Deja tu comentario</label>
                 <textarea 
                   id="comment-input" 
                   maxlength="200" 
                   placeholder="Escribe tu opinión sobre este juego (máx. 200 caracteres)..." 
-                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+                  class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   rows="3"
                 ></textarea>
-                <div class="flex justify-between items-center mt-2">
+                <div class="flex items-center justify-between mt-2">
                   <span id="char-count" class="text-xs text-gray-500">0/200 caracteres</span>
-                  <button id="send-comment" class="px-4 py-2 text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium">
+                  <button id="send-comment" class="px-4 py-2 font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
                     Enviar comentario
                   </button>
                 </div>

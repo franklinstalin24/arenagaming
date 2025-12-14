@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\ExternalController;
+use App\Http\Controllers\Api\UploadController;
 
 //rutas api
 
@@ -60,6 +61,9 @@ Route::middleware(['auth:sanctum', 'is_admin'])->group(function () {
 // Logout
     // admin product management (also accept english paths)
     Route::post('/logout', [AuthController::class, 'logout']);
+    
+    // Upload de imágenes a Firebase
+    Route::post('/upload/image', [UploadController::class, 'uploadImage']);
  
     // Gestión completa de Juegos (excepto index/show que ya definimos arriba)
     Route::post('/juegos', [JuegoController::class, 'store']);
