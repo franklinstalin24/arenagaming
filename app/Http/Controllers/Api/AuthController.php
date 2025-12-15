@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    //login
+    //login user
     public function login(Request $request)
     {
         $request->validate([
@@ -26,7 +26,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        //token
+        //token creation
 
         $token = $user->createToken($user->role)->plainTextToken;
 
@@ -40,7 +40,7 @@ class AuthController extends Controller
         ], 200);
     }
 
-    //register
+    //register user
     public function register(Request $request)
     {
         $request->validate([
@@ -68,7 +68,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    //logout
+    //logout token
 
     public function logout(Request $request)
     {
